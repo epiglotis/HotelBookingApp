@@ -13,8 +13,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { DateRange } from 'react-date-range';
 import { format } from 'date-fns';
+import {useNavigate} from "react-router-dom";
 
 function Header({ type }) {
+  const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [date, setDate] = useState([
     {
@@ -30,6 +32,7 @@ function Header({ type }) {
     children: 0,
     room: 1,
   });
+  const navigate = useNavigate()
 
   const handleOption = (name, operation) => {
     setOptions((prev) => {
@@ -39,6 +42,9 @@ function Header({ type }) {
       };
     });
   };
+  const handleSearch = () =>{
+    navigate("/hotels",{state:{destination,date,options}})
+  }
 
   return (
     <div className='header'>
@@ -78,6 +84,7 @@ function Header({ type }) {
                   type='text'
                   placeholder='Where are you going?'
                   className='headerSearchInput'
+                  onChange={e=>setDestination(e.target.value)}
                 />
               </div>
               <div className='headerSearchItem'>
@@ -96,6 +103,7 @@ function Header({ type }) {
                     moveRangeOnFirstSelection={false}
                     ranges={date}
                     className='date'
+                    minDate={new Date()}
                   />
                 )}
               </div>
@@ -177,7 +185,7 @@ function Header({ type }) {
                 )}
               </div>
               <div className='headerSearchItem'>
-                <button className='headerBtn'> Search</button>
+                <button className='headerBtn' onClick={handleSearch}> Search</button>
               </div>
             </div>
           </>
